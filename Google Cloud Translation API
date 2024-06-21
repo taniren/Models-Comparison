@@ -1,0 +1,114 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# Step 1: Importing Google Cloud Translation library
+# In[1]:
+
+from google.cloud import translate_v2
+
+# Step 2: List all available languages and localize them to the target one
+# In[2]:
+
+def list_languages_with_target(target: str) -> dict:
+    """Lists all available languages and localizes them to the target language.
+
+    Target must be an ISO 639-1 language code.
+    See https://g.co/cloud/translate/v2/translate-reference#supported_languages
+    """
+    from google.cloud import translate_v2 as translate
+
+    translate_client = translate.Client()
+
+    results = translate_client.get_languages(target_language=target)
+
+    for language in results:
+        print("{name} ({language})".format(**language))
+
+    return results
+
+# Step 3: Importing Google Cloud Language library to authenticate
+# In[4]:
+
+from google.cloud import language_v1
+
+# Step 4: Function to authenticate with an API key
+# In[5]:
+
+def authenticate_with_api_key(quota_project_id: str, api_key_string: str) -> None:
+    """
+    Authenticates with an API key for Google Language service.
+
+    Args:
+        quota_project_id: Google Cloud project id that should be used for quota and billing purposes.
+        api_key_string: The API key to authenticate to the service.
+    """
+    # Setting up the authentication with API key and quota project ID
+    client = language_v1.LanguageServiceClient(
+        client_options={"api_key": api_key_string, "quota_project_id": quota_project_id}
+    )
+    text = "Hello, world!"
+    document = language_v1.Document(
+        content=text, type_=language_v1.Document.Type.PLAIN_TEXT
+    )
+
+    print(f"Text: {text}")
+    print("Successfully authenticated using the API key")
+
+# Authentication (key anonymized)
+authenticate_with_api_key("my-thesisproject-00000-0", "[yourAPIkey]")
+
+# Step 5: Function to translate text into the target language (English)
+# In[19]:
+
+def translate_text(target: str, text: str) -> str:
+    """Translates text into the target language.
+
+    Target must be an ISO 639-1 language code.
+    See https://g.co/cloud/translate/v2/translate-reference#supported_languages
+    """
+    translate_client = translate_v2.Client()
+
+    result = translate_client.translate(text, target_language=target)
+
+    return result["translatedText"]
+
+# Example of translated text
+translate_text("en-uk", "Hallo ich bin die Tania")
+
+# Step 6: Fake translation function for testing
+# In[11]:
+
+def translate_text_fake(target: str, text: str) -> str:
+    return "translate to " + target + "  " + text
+
+# Step 7: Real function to translate the CSV
+# In[24]:
+
+import pandas as pd
+from tqdm import tqdm
+
+def custom_translate_function(text, dest_lang):
+    translated_text = translate_text(dest_lang, text)
+    return translated_text
+
+def translate_csv(input_file, output_file, dest_lang='en-uk'):
+    # Reading the CSV file
+    df = pd.read_csv(input_file)
+    
+    # Iterating over every row in the DataFrame
+    for index, row in tqdm(df.iterrows(), total=df.shape[0], desc="Translating"):
+        # Translating 'subject' & 'text' text columns
+        if isinstance(row['subject'], str):
+            df.at[index, 'subject'] = custom_translate_function(row['subject'], dest_lang)
+        if isinstance(row['text'], str):
+            df.at[index, 'text'] = custom_translate_function(row['text'], dest_lang)
+        
+    # Writing translated data to the new CSV file
+    df.to_csv(output_file, index=False)
+    print(f"Translation complete. Translated file saved as {output_file}")
+
+# Saving and defining where to save
+input_file = '/Users/tania_ren/Desktop/Everything for me thesis/Customer_Dataset_with_Category_Numbers.csv'  
+output_file = '/Users/tania_ren/Desktop/Everything for me thesis/Multilingual_Dataset.csv'  
+translate_csv(input_file, output_file, dest_lang='en')
+

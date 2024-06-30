@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# The following code was inspired by HuggingFace. #KameronB/SITCC-Incident-Request-Classifier · Hugging face. (n.d.). 
+                                                        #https://huggingface.co/KameronB/SITCC-Incident-Request-Classifier
+
 # #  Data Exploration # # (Data exploration, visualizations, sentiment analysis)  and category prediction on multilingual data using DistilBERT.
 
 # Step 1: Imports
@@ -187,7 +190,8 @@ batch_size = 8
 
 train_data = TensorDataset(train_inputs, train_masks, train_labels)
 train_sampler = RandomSampler(train_data)
-train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
+train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)  #Hachcham, A. (2023, August 11). Natural Language Processing with Hugging Face and Transformers. 
+                                                                                                #neptune.ai. https://neptune.ai/blog/natural-language-processing-with-hugging-face-and-transformers
 
 val_data = TensorDataset(val_inputs, val_masks, val_labels)
 val_sampler = SequentialSampler(val_data)
@@ -206,7 +210,8 @@ scheduler = get_linear_schedule_with_warmup(optimizer,
 # Setting up optimizer with learning rate (0 warmup steps)
 optimizer = AdamW(model.parameters(), lr=2e-5)
 total_steps = len(train_dataloader) * epochs
-scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=total_steps)
+scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=total_steps) #QikaiXu. (n.d.). Writer-Style-Recognition/bert_train.py at main · QikaiXu/Writer-Style-Recognition. GitHub. 
+                                                                                                                #https://github.com/QikaiXu/Writer-Style-Recognition/blob/main/bert_train.py
 
 # Initializing variables for predictions and labels
 val_preds, val_labels_list = [], []
@@ -260,7 +265,7 @@ for epoch in range(epochs):
         accuracy = (predictions == batch_labels).cpu().numpy().mean() * 100
         eval_accuracy += accuracy
         val_preds_epoch.extend(predictions.cpu().numpy())
-        val_labels_epoch.extend(batch_labels.cpu().numpy())
+        val_labels_epoch.extend(batch_labels.cpu().numpy())  #(KameronB/SITCC-Incident-Request-Classifier · Hugging Face, n.d.)
         
         val_iterator.set_postfix({"accuracy": accuracy})
     
@@ -334,7 +339,8 @@ test_labels = torch.tensor(test_labels)
 # Defining the test DataLoader
 test_data = TensorDataset(test_inputs, test_masks, test_labels)
 test_sampler = SequentialSampler(test_data)
-test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
+test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)  #Prediction function in an NLP classification problem without using MLM. (2022, May 2). 
+                                                                                            #PyTorch Forums. https://discuss.pytorch.org/t/prediction-function-in-an-nlp-classification-problem-without-using-mlm/150596
 
 # Creating Confusion Matrix on Test Set
 print("\nRunning on Test Set...")

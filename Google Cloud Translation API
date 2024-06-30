@@ -3,6 +3,8 @@
 
 # Step 1: Importing Google Cloud Translation library
 # In[1]:
+# the following code followed the guidelines of the Google Cloud.  
+# Discovering supported languages (Basic). (n.d.). Google Cloud. https://cloud.google.com/translate/docs/basic/discovering-supported-languages
 
 from google.cloud import translate_v2
 
@@ -22,7 +24,7 @@ def list_languages_with_target(target: str) -> dict:
     results = translate_client.get_languages(target_language=target)
 
     for language in results:
-        print("{name} ({language})".format(**language))
+        print("{name} ({language})".format(**language)) #(Discovering Supported Languages (Basic), n.d.)
 
     return results
 
@@ -40,7 +42,7 @@ def authenticate_with_api_key(quota_project_id: str, api_key_string: str) -> Non
 
     Args:
         quota_project_id: Google Cloud project id that should be used for quota and billing purposes.
-        api_key_string: The API key to authenticate to the service.
+        api_key_string: The API key to authenticate to the service.  #(Discovering Supported Languages (Basic), n.d.)
     """
     # Setting up the authentication with API key and quota project ID
     client = language_v1.LanguageServiceClient(
@@ -48,7 +50,7 @@ def authenticate_with_api_key(quota_project_id: str, api_key_string: str) -> Non
     )
     text = "Hello, world!"
     document = language_v1.Document(
-        content=text, type_=language_v1.Document.Type.PLAIN_TEXT
+        content=text, type_=language_v1.Document.Type.PLAIN_TEXT  #(Discovering Supported Languages (Basic), n.d.)
     )
 
     print(f"Text: {text}")

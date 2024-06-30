@@ -29,12 +29,14 @@ def get_wordnet_pos(word):
                 "N": wordnet.NOUN,
                 "V": wordnet.VERB,
                 "R": wordnet.ADV}
-    return tag_dict.get(tag, wordnet.NOUN)
+    return tag_dict.get(tag, wordnet.NOUN)  # Wang, A. P. (2020, September 29). Can you tell someone’s gender based on tweets? – AI Journey.
+                                                # https://ai-journey.com/2020/09/can-you-tell-someones-gender-based-on-tweets/
 
 def preprocess_text(text, language='english'):
     text = re.sub(r'[^\w\s]', '', text)  # punctuation
     text = re.sub(r'\d+', '', text)  # digits
-    text = text.lower()  # lowercasing
+    text = text.lower()  # lowercasing  # Konjeti, V. a. P. B. C. (2020b, June 4). Text preprocessing techniques for NLP tasks. Chaitu Konjeti.
+                                            # https://chaitukonjeti.me/2020/06/04/text-preprocessing-techniques-for-nlp-tasks/
 
     # Stopwords based on language (German/English)
     stopwords_set = stopwords.words('german') if language == 'german' else stopwords.words('english')
@@ -66,7 +68,9 @@ y = data['category_number']
 
 # Step 5: Training the Model (70% training, 20% validation, 10% test)
 train_texts, temp_texts, train_labels, temp_labels = train_test_split(texts, labels, test_size=0.3, random_state=42)
-val_texts, test_texts, val_labels, test_labels = train_test_split(temp_texts, temp_labels, test_size=0.33, random_state=42)
+val_texts, test_texts, val_labels, test_labels = train_test_split(temp_texts, temp_labels, test_size=0.33, random_state=42) #Data-Driven Science. (2023, July 5). 
+                                                                                                                            #Building text classification models using BERT. Data-Driven Science. https://datadrivenscience.com/building-text-classification-models-using-bert/
+
 
 
 # Step 6: Evaluation Metrics (Accuracy, Precision, Recall, F1)
